@@ -2,6 +2,7 @@ import VideoCard from "../components/VideoCard";
 import axios from "axios";
 import { Video } from "../types";
 import NoResults from "../components/NoResults"
+import { BASE_URL } from "../utils/utils";
 
 interface IProps {
   videos: Video[] // an array of Video 
@@ -22,7 +23,7 @@ const Home = ({ videos }: IProps) => {
 
 //fetch data. getServerSideProps only uses to render a page whose data must be fetched at request time
 export const getServerSideProps = async () => {
-  const { data } = await axios.get(`http://localhost:3000/api/post`); // goes to api/post folder
+  const { data } = await axios.get(`${BASE_URL}/api/post`); // goes to api/post folder
 
   return {
     props: {
