@@ -23,18 +23,34 @@ const Detail = ({ postDetails }: IProps) => {
   const [playing, setPlaying] = useState(false);
   const [isVideoMuted, setIsVideoMuted] = useState(false);
   const router = useRouter();
-  const {userProfile}: any = useAuthStore();
+  const { userProfile }: any = useAuthStore();
+  const [comment, setComment] = useState([]);
+  const [isPostingComment, setIsPostingComment] = useState(false);
+
   const handleLike = async (like: boolean) => {
     if (userProfile) {
-      const {data} = await axios.put(`${BASE_URL}/api/like`, {
+      const { data } = await axios.put(`${BASE_URL}/api/like`, {
         userId: userProfile._id,
         postId: post._id,
-        like
-      })
-      
-      setPost({...post, likes: data.likes})
-   }
-  }
+        like,
+      });
+
+      setPost({ ...post, likes: data.likes });
+    }
+  };
+
+  const addComment = async (e) => {
+    e.preventDefault();
+
+    if (userProfile && comment) {
+      setIsPostingComment(true);
+
+      const response = await axios.put(`${BASE_URL}/api/post/${post._id}`, {
+        userId: userProfile._id,
+        comment,
+      });
+    }
+  };
 
   const onVideoClick = () => {
     if (playing) {
@@ -127,8 +143,21 @@ const Detail = ({ postDetails }: IProps) => {
             </div>
           </div>
           <p className="px-10 text-md text-gray-600 text-lg">{post.caption}</p>
-          <div className="mt-10 px-10 ">{userProfile && <LikeButton likes={post.likes} handleLike={() => handleLike(true)} handleDislike={() => handleLike(false)} />}</div>
-          <Comments />
+          <div className="mt-10 px-10 ">
+            {userProfile && (
+              <LikeButton
+                likes={post.likes}
+                handleLike={() => handleLike(true)}
+                handleDislike={() => handleLike(false)}
+              />
+            )}
+          </div>
+          <Comments
+            comment={comment}
+            setComment={setComment}
+            addComment={addComment}
+            isPostingComment={isPostingComment}
+          />
         </div>
       </div>
     </div>

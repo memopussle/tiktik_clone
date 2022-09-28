@@ -14,7 +14,7 @@ const LikeButton = ({ handleDislike, handleLike, likes }: IProps) => {
   const filterLikes = likes?.filter((item) => item._ref === userProfile?._id);
 
   useEffect(() => {
-    if (filterLikes.length > 0) {
+    if (filterLikes?.length > 0) {
       setAlreadyLike(true);
     } else {
       setAlreadyLike(false);
@@ -22,7 +22,7 @@ const LikeButton = ({ handleDislike, handleLike, likes }: IProps) => {
   }, [likes, filterLikes]);
 
   return (
-    <div className="gap-6 ">
+    <div className="flex gap-6 ">
       <div className="mt-4 flex flex-col justify-center items-center cursor-pointer">
         {alreadyLike ? (
           <div
